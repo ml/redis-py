@@ -168,7 +168,7 @@ class Redis(object):
         string_keys_to_dict('ZSCORE ZINCRBY', float),
         string_keys_to_dict(
             'FLUSHALL FLUSHDB LPUSH LSET LTRIM MSET RENAME RPUSH '
-            'SAVE SELECT SET SHUTDOWN',
+            'SAVE SELECT SET SHUTDOWN SLAVEOF',
             lambda r: r == 'OK'
             ),
         string_keys_to_dict('SDIFF SINTER SMEMBERS SUNION',
@@ -379,6 +379,10 @@ class Redis(object):
     def info(self):
         "Returns a dictionary containing information about the Redis server"
         return self.format_inline('INFO')
+        
+    def slaveof(self, host, port):
+        "Changes slave's repliaction settings"
+        return self.format_inline("SLAVEOF", host, port)    
         
     def lastsave(self):
         """

@@ -51,6 +51,13 @@ class ServerCommandsTestCase(unittest.TestCase):
         self.assert_(isinstance(info, dict))
         self.assertEquals(info['db9']['keys'], 2)
         
+    def test_slaveof(self):
+        master = redis.Redis(host='localhost', port=6666, db=10)
+        self.assertEquals(self.client.slaveof('localhost', 6666), True)
+        self.assertEquals(self.client.info()['role'], 'slave')
+        self.assertEquals(self.client.slaveof('no', 'one'), True)
+        self.assertEquals(self.client.info()['role'], 'master')
+        
     def test_lastsave(self):
         self.assert_(isinstance(self.client.lastsave(), datetime.datetime))
         
