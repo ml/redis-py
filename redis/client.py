@@ -196,7 +196,7 @@ class Redis(object):
         self.encoding = charset
         self.errors = errors
         self.timeout = timeout
-        self.select(host, port, db, password, timeout)
+        self.select(host, port, db, password)
         
     #### Legacty accessors of connection information ####
     def _get_host(self):
