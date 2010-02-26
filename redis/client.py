@@ -10,13 +10,14 @@ _connection_manager = threading.local()
 
 class Connection(object):
     "Manages TCP communication to and from a Redis server"
-    def __init__(self, host='localhost', port=6379, db=0, password=None):
+    def __init__(self, host='localhost', port=6379, db=0, password=None, timeout=None):
         self.host = host
         self.port = port
         self.db = db
         self.password = password
         self._sock = None
         self._fp = None
+        self.timeout = timeout
         
     def connect(self, redis_instance):
         "Connects to the Redis server is not already connected"
@@ -24,6 +25,8 @@ class Connection(object):
             return
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            if self.timeout:
+                sock.set_timeout(self.timeout)
             sock.connect((self.host, self.port))
         except socket.error, e:
             raise ConnectionError("Error %s connecting to %s:%s. %s." % \
