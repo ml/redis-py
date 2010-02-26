@@ -26,7 +26,7 @@ class Connection(object):
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             if self.timeout:
-                sock.set_timeout(self.timeout)
+                sock.settimeout(self.timeout)
             sock.connect((self.host, self.port))
         except socket.error, e:
             raise ConnectionError("Error %s connecting to %s:%s. %s." % \
