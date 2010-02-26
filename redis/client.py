@@ -191,10 +191,12 @@ class Redis(object):
     
     def __init__(self, host='localhost', port=6379,
                 db=0, password=None,
-                charset='utf-8', errors='strict'):
+                charset='utf-8', errors='strict',
+                timeout = None):
         self.encoding = charset
         self.errors = errors
-        self.select(host, port, db, password)
+        self.timeout = timeout
+        self.select(host, port, db, password, timeout)
         
     #### Legacty accessors of connection information ####
     def _get_host(self):
@@ -317,7 +319,7 @@ class Redis(object):
             setattr(
                 _connection_manager,
                 key, 
-                Connection(host, port, db, password))
+                Connection(host, port, db, password, self.timeout))
         conn = getattr(_connection_manager, key)
         # if for whatever reason the connection gets a bad password, make
         # sure a subsequent attempt with the right password makes its way
